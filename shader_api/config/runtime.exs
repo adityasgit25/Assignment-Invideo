@@ -1,5 +1,5 @@
 import Config
-config :shader_api, gemini_api_key: System.get_env("GEMINI_API_KEY")
+# config :shader_api, gemini_api_key: System.get_env("GEMINI_API_KEY")
 
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
@@ -100,4 +100,17 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+
 end
+
+if config_env() == :dev do
+  # Load environment variables from .env file in development
+  if File.exists?(".env") do
+    for line <- File.stream!(".env") do
+      [key, value] = String.split(line, "=", parts: 2)
+      System.put_env(String.trim(key), String.trim(value))
+    end
+  end
+end
+
+config :shader_api, gemini_api_key: System.get_env("GEMINI_API_KEY")

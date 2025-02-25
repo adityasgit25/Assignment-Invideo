@@ -2,14 +2,14 @@ defmodule ShaderApiWeb.GeminiController do
   use ShaderApiWeb, :controller
   alias HTTPoison
 
-  @api_key "AIzaSyByF2E_4jEvoza7EnZEXag-TdwUg8uQd0I"
+  @api_key System.get_env("GEMINI_API_KEY")
   @gemini_url "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=#{@api_key}"
 
   def generate(conn, %{"text" => text}) do
     IO.inspect(@api_key, label: "GEMINI_API_KEY") # Debug statement
 
     body = %{
-      "contents" => [%{"parts" => [%{"text" => "Give me <pre> tag to display the raw shader code:\n\n" <> text}]}]
+      "contents" => [%{"parts" => [%{"text" => "Give me <pre> tag to display the raw shader code being valid GLSL:\n\n" <> text}]}]
     }
     |> Jason.encode!()
 
